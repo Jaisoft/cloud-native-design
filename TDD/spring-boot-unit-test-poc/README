@@ -1,1 +1,0 @@
-curl https://start.spring.io/starter.zip -d bootVersion=2.3.4 -d language=java -d javaVersion=11 -d type=maven-project  -d packaging=jar -d groupId=com.jaisoft -d artifactId=spring-boot-unit-test-poc -d name=spring-boot-unit-test-poc -d version=0.0.1-SNAPSHOT -d packageName=com.jaisoft.utesting -d dependencies=devtools,web  -o spring-boot-unit-test-poc.zip
