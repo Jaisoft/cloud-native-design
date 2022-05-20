@@ -1,8 +1,5 @@
 package com.jaisoft.tdd.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import com.jaisoft.tdd.model.User;
@@ -11,16 +8,21 @@ import com.jaisoft.tdd.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+
 @RestController
 @RequestMapping("/api/v1")
+@Tag(name = "User API", description = "Accions on User")
 public class UserController {
 
     private UserService userService;
@@ -29,26 +31,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(path = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)@ResponseStatus(code = HttpStatus.CREATED)
+    @Operation(summary = "Upload a Document", description = "Create a User", responses = {
+            @ApiResponse(responseCode = "201", description = "Create"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "409", description = "Conflict") })
     ResponseEntity<User> createUser(@Valid @RequestBody User user) throws Exception{
 
        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
  
     }
-
-
-    /*@ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-        
-        String fieldName = ((FieldError) error).getField();
-        String errorMessage = error.getDefaultMessage();
-        errors.put(fieldName, errorMessage);
-    });
-    return errors;
-}*/
-
 
 }
